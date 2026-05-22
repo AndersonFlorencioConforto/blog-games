@@ -1,6 +1,7 @@
 package br.com.andersondev.infrastructure;
 
 import br.com.andersondev.infrastructure.auth.AuthTransactionalFacade;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,8 +20,12 @@ class ApplicationContextTest {
     @Autowired
     private AuthTransactionalFacade authFacade;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Test
     void contextLoads() {
         assertNotNull(authFacade);
+        assertNotNull(objectMapper);
     }
 }

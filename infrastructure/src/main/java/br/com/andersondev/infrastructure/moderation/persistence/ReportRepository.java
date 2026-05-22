@@ -1,5 +1,6 @@
 package br.com.andersondev.infrastructure.moderation.persistence;
 
+import br.com.andersondev.domain.moderation.ReportStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
