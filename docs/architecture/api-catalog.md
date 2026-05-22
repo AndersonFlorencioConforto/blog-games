@@ -32,6 +32,8 @@
 
 ## 1. Autenticacao (`/auth`)
 
+> **Documentacao detalhada:** [`docs/api/auth.md`](../api/auth.md)
+
 ### POST /auth/register
 **Descricao:** Cadastro de novo usuario  
 **Auth:** Publica  
@@ -158,6 +160,8 @@
 ---
 
 ## 2. Usuarios (`/users`)
+
+> **Documentacao detalhada:** [`docs/api/users.md`](../api/users.md)
 
 ### GET /users/{id}
 **Descricao:** Exibe perfil publico de um usuario  
@@ -292,6 +296,8 @@
 ---
 
 ## 3. Jogos (`/games`)
+
+> **Documentacao detalhada:** [`docs/api/games.md`](../api/games.md)
 
 ### GET /games
 **Descricao:** Lista jogos com filtros opcionais  
@@ -460,6 +466,8 @@
 
 ## 4. Estante do Usuario (`/users/{userId}/shelf` e `/shelf`)
 
+> **Documentacao detalhada:** [`docs/api/shelf.md`](../api/shelf.md)
+
 ### GET /users/{userId}/shelf
 **Descricao:** Exibe estante de um usuario (publica)  
 **Auth:** Publica  
@@ -547,6 +555,8 @@
 ---
 
 ## 5. Threads e Comentarios (`/games/{gameId}/threads`)
+
+> **Documentacao detalhada:** [`docs/api/discussion.md`](../api/discussion.md)
 
 ### GET /games/{gameId}/threads
 **Descricao:** Lista threads de um jogo  
@@ -695,6 +705,8 @@
 
 ## 6. Noticias (`/news`)
 
+> **Documentacao detalhada:** [`docs/api/news.md`](../api/news.md)
+
 ### GET /news
 **Descricao:** Lista noticias paginadas  
 **Auth:** Publica  
@@ -779,6 +791,8 @@
 ---
 
 ## 7. Denuncias / Moderacao (`/admin/reports`)
+
+> **Documentacao detalhada:** [`docs/api/moderation.md`](../api/moderation.md)
 
 ### GET /admin/reports
 **Descricao:** Lista denuncias abertas  

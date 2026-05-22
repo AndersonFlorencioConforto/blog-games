@@ -1,9 +1,12 @@
 package br.com.andersondev.infrastructure.user;
 
+import br.com.andersondev.application.moderation.create.CreateReportCommand;
 import br.com.andersondev.application.social.follow.FollowUserCommand;
 import br.com.andersondev.application.social.follow.ListSocialCommand;
 import br.com.andersondev.application.user.profile.UpdateProfileCommand;
 import br.com.andersondev.infrastructure.api.PageResponse;
+import br.com.andersondev.infrastructure.moderation.models.CreateReportRequest;
+import br.com.andersondev.infrastructure.moderation.models.ReportResponse;
 import br.com.andersondev.infrastructure.security.AuthenticatedUser;
 import br.com.andersondev.infrastructure.social.models.UserSummaryResponse;
 import br.com.andersondev.infrastructure.user.models.MyProfileResponse;
@@ -21,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
 
 /**
  * Controller de usuarios: perfil, perfil proprio e relacoes sociais (api-catalog secao 2).
@@ -96,5 +101,23 @@ public class UserController {
     ) {
         final var pagination = this.userFacade.listFollowing(ListSocialCommand.with(id, page, size));
         return ResponseEntity.ok(PageResponse.from(pagination, UserSummaryResponse::from));
+    }
+
+    @PostMapping("/{id}/report")
+    public ResponseEntity<ReportResponse> reportUser(
+            @PathVariable("id") final String id,
+            @RequestBody final CreateReportRequest request,
+            @AuthenticationPrincipal final AuthenticatedUser principal
+    ) {
+        final var command = CreateReportCommand.with(
+                id,
+                principal.userId(),
+                request.reason(),
+                request.description()
+        );
+        final var output = this.userFacade.reportUser(command);
+        return ResponseEntity
+                .created(URI.create("/api/v1/admin/reports/" + output.id()))
+                .body(ReportResponse.from(output));
     }
 }

@@ -1,5 +1,8 @@
 package br.com.andersondev.infrastructure.user;
 
+import br.com.andersondev.application.moderation.ReportOutput;
+import br.com.andersondev.application.moderation.create.CreateReportCommand;
+import br.com.andersondev.application.moderation.create.CreateReportUseCase;
 import br.com.andersondev.application.social.UserSummaryOutput;
 import br.com.andersondev.application.social.follow.FollowUserCommand;
 import br.com.andersondev.application.social.follow.FollowUserUseCase;
@@ -31,6 +34,7 @@ public class UserTransactionalFacade {
     private final UnfollowUserUseCase unfollowUserUseCase;
     private final ListFollowersUseCase listFollowersUseCase;
     private final ListFollowingUseCase listFollowingUseCase;
+    private final CreateReportUseCase createReportUseCase;
 
     public UserTransactionalFacade(
             final GetUserProfileUseCase getUserProfileUseCase,
@@ -39,7 +43,8 @@ public class UserTransactionalFacade {
             final FollowUserUseCase followUserUseCase,
             final UnfollowUserUseCase unfollowUserUseCase,
             final ListFollowersUseCase listFollowersUseCase,
-            final ListFollowingUseCase listFollowingUseCase
+            final ListFollowingUseCase listFollowingUseCase,
+            final CreateReportUseCase createReportUseCase
     ) {
         this.getUserProfileUseCase = getUserProfileUseCase;
         this.getMyProfileUseCase = getMyProfileUseCase;
@@ -48,6 +53,7 @@ public class UserTransactionalFacade {
         this.unfollowUserUseCase = unfollowUserUseCase;
         this.listFollowersUseCase = listFollowersUseCase;
         this.listFollowingUseCase = listFollowingUseCase;
+        this.createReportUseCase = createReportUseCase;
     }
 
     @Transactional(readOnly = true)
@@ -83,5 +89,10 @@ public class UserTransactionalFacade {
     @Transactional(readOnly = true)
     public Pagination<UserSummaryOutput> listFollowing(final ListSocialCommand command) {
         return this.listFollowingUseCase.execute(command);
+    }
+
+    @Transactional
+    public ReportOutput reportUser(final CreateReportCommand command) {
+        return this.createReportUseCase.execute(command);
     }
 }

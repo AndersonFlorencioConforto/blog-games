@@ -59,6 +59,14 @@ public class SecurityConfig {
                                 API + "/auth/reset-password").permitAll()
                         // Logout exige autenticacao
                         .requestMatchers(HttpMethod.POST, API + "/auth/logout").authenticated()
+                        // Threads de discussao: escrita exige autenticacao, leitura e publica.
+                        // Declarados ANTES do GET publico /games/** para terem precedencia.
+                        .requestMatchers(HttpMethod.POST, API + "/games/*/threads").authenticated()
+                        .requestMatchers(HttpMethod.POST, API + "/games/*/threads/*/replies").authenticated()
+                        .requestMatchers(HttpMethod.POST, API + "/games/*/threads/*/likes").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, API + "/games/*/threads/*/likes").authenticated()
+                        .requestMatchers(HttpMethod.POST, API + "/games/*/threads/*/replies/*/likes").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, API + "/games/*/threads/*/replies/*/likes").authenticated()
                         // Avaliar jogo e ver propria avaliacao exigem autenticacao (security-matrix).
                         // Declarados ANTES do GET publico de /games/** para terem precedencia.
                         .requestMatchers(HttpMethod.POST, API + "/games/*/ratings").authenticated()
@@ -86,6 +94,15 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, API + "/games").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, API + "/games/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, API + "/games/*").hasRole("ADMIN")
+                        // Writes de noticias: ADMIN. Leitura ja coberta pelo permitAll de /news/** acima.
+                        .requestMatchers(HttpMethod.POST, API + "/news").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, API + "/news/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, API + "/news/*").hasRole("ADMIN")
+                        // Moderacao: admin reports exige ADMIN; reportar usuario exige autenticacao.
+                        .requestMatchers(HttpMethod.GET, API + "/admin/reports").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, API + "/admin/reports/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, API + "/admin/reports/*/resolve").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, API + "/users/*/report").authenticated()
                         // Demais rotas exigem autenticacao; autorizacao fina via @PreAuthorize
                         .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex
