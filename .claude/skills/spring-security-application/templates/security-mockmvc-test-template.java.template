@@ -1,0 +1,48 @@
+package com.example.infrastructure.api;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+class SecurityIntegrationTest {
+
+    @Autowired
+    private MockMvc mvc;
+
+    @Test
+    void shouldRejectProtectedEndpointWhenAnonymous() throws Exception {
+        mvc.perform(get("/api/admin/report"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    void shouldDenyAdminEndpointForNonAdmin() throws Exception {
+        mvc.perform(get("/api/admin/report"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldAllowAdminEndpointForAdmin() throws Exception {
+        mvc.perform(get("/api/admin/report"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser
+    void shouldValidateCsrfOnUnsafeMethod() throws Exception {
+        mvc.perform(post("/api/user/update").with(csrf().useInvalidToken()))
+                .andExpect(status().isForbidden());
+    }
+}

@@ -1,0 +1,22 @@
+package {{package}}.infrastructure.configuration.usecases;
+
+import {{package}}.application.{{resourceLower}}.create.Create{{resource}}UseCase;
+import {{package}}.application.{{resourceLower}}.create.DefaultCreate{{resource}}UseCase;
+import {{package}}.domain.{{resourceLower}}.{{resource}}Gateway;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class {{resource}}UseCaseConfig {
+
+    private final {{resource}}Gateway gateway;
+
+    public {{resource}}UseCaseConfig(final {{resource}}Gateway gateway) {
+        this.gateway = gateway;
+    }
+
+    @Bean
+    public Create{{resource}}UseCase create{{resource}}UseCase() {
+        return new DefaultCreate{{resource}}UseCase(gateway);
+    }
+}

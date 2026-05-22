@@ -1,0 +1,8 @@
+plugins {
+    id 'java-library'
+}
+
+// domain: Java puro. SEM Spring, SEM JPA, SEM web. Apenas linguagem + testes.
+dependencies {
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.20.0'
+}

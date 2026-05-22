@@ -1,0 +1,4 @@
+rootProject.name = 'blog'
+include 'domain'
+include 'application'
+include 'infrastructure'

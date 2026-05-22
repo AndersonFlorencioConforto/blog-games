@@ -1,0 +1,10 @@
+package {{package}}.infrastructure.{{resourceLower}}.models;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record Create{{resource}}Request(
+        @JsonProperty("name") String name,
+        @JsonProperty("description") String description,
+        @JsonProperty("is_active") Boolean active
+) {
+}

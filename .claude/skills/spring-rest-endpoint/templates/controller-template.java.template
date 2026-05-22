@@ -1,0 +1,36 @@
+package {{package}}.infrastructure.api.controllers;
+
+import {{package}}.application.{{resourceLower}}.create.Create{{resource}}Command;
+import {{package}}.application.{{resourceLower}}.create.Create{{resource}}UseCase;
+import {{package}}.infrastructure.api.{{resource}}API;
+import {{package}}.infrastructure.{{resourceLower}}.models.Create{{resource}}Request;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
+import java.util.Objects;
+
+@RestController
+public class {{resource}}Controller implements {{resource}}API {
+
+    private final Create{{resource}}UseCase create{{resource}}UseCase;
+
+    public {{resource}}Controller(final Create{{resource}}UseCase create{{resource}}UseCase) {
+        this.create{{resource}}UseCase = Objects.requireNonNull(create{{resource}}UseCase);
+    }
+
+    @Override
+    public ResponseEntity<?> create{{resource}}(final Create{{resource}}Request input) {
+        final var command = Create{{resource}}Command.with(
+                input.name(),
+                input.description(),
+                input.active() != null ? input.active() : true
+        );
+
+        final var output = this.create{{resource}}UseCase.execute(command);
+
+        return ResponseEntity
+                .created(URI.create("/{{resourceLower}}s/" + output.id()))
+                .body(output);
+    }
+}

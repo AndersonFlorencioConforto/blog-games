@@ -1,0 +1,60 @@
+package {{package}}.infrastructure.{{resourceLower}}.persistence;
+
+import {{package}}.domain.{{resourceLower}}.{{resource}};
+import {{package}}.domain.{{resourceLower}}.{{resource}}ID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.time.Instant;
+
+@Entity(name = "{{resource}}")
+@Table(name = "{{resourceLower}}s")
+public class {{resource}}JpaEntity {
+
+    @Id
+    private String id;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME(6)")
+    private Instant createdAt;
+
+    @Column(name = "updated_at", nullable = false, columnDefinition = "DATETIME(6)")
+    private Instant updatedAt;
+
+    public {{resource}}JpaEntity() {
+    }
+
+    private {{resource}}JpaEntity(
+            final String id,
+            final String name,
+            final Instant createdAt,
+            final Instant updatedAt
+    ) {
+        this.id = id;
+        this.name = name;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public static {{resource}}JpaEntity from(final {{resource}} aggregate) {
+        return new {{resource}}JpaEntity(
+                aggregate.getId().getValue(),
+                aggregate.getName(),
+                aggregate.getCreatedAt(),
+                aggregate.getUpdatedAt()
+        );
+    }
+
+    public {{resource}} toAggregate() {
+        return {{resource}}.with(
+                {{resource}}ID.from(this.id),
+                this.name,
+                this.createdAt,
+                this.updatedAt
+        );
+    }
+}

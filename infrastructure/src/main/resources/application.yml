@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: ${APP_NAME:blog-games-platform}
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+  # ADR-0001: Virtual Threads habilitados (Boot 4 / Java 25)
+  threads:
+    virtual:
+      enabled: true
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 10
+        order_inserts: true
+        order_updates: true
+
+server:
+  port: ${SERVER_PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+# Seguranca de tokens (ADR-0003). Em nao-local, JWT_SECRET e obrigatorio.
+security:
+  jwt:
+    secret: ${JWT_SECRET:local-dev-secret-change-me-please-32bytes-minimum!!}
+    access-token-expiration: ${JWT_ACCESS_EXPIRATION:900}
+    refresh-token-expiration: ${JWT_REFRESH_EXPIRATION:604800}
+    issuer: blog-games-platform
+  password-reset:
+    token-expiration: ${PASSWORD_RESET_EXPIRATION:3600}
+    app-base-url: ${APP_BASE_URL:http://localhost:8080}
+    reset-path: /reset-password
+
+# Envio de e-mail (ADR-0004 / P-006)
+app:
+  mail:
+    enabled: ${MAIL_ENABLED:false}
+    from: ${MAIL_FROM:no-reply@blogames.com}

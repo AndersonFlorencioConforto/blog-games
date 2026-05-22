@@ -1,0 +1,30 @@
+package com.example.infrastructure.transactional;
+
+import com.example.application.order.create.CreateOrderCommand;
+import com.example.application.order.create.CreateOrderOutput;
+import com.example.application.order.create.CreateOrderUseCase;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
+
+/**
+ * Wrapper transacional para manter o caso de uso de application sem anotacoes de framework.
+ */
+@Component
+public class TransactionalCreateOrderUseCase extends CreateOrderUseCase {
+
+    private final CreateOrderUseCase delegate;
+
+    public TransactionalCreateOrderUseCase(
+            @Qualifier("defaultCreateOrderUseCase") final CreateOrderUseCase delegate) {
+        this.delegate = Objects.requireNonNull(delegate);
+    }
+
+    @Override
+    @Transactional
+    public CreateOrderOutput execute(final CreateOrderCommand command) {
+        return this.delegate.execute(command);
+    }
+}

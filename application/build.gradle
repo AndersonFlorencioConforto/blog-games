@@ -1,0 +1,11 @@
+plugins {
+    id 'java-library'
+}
+
+// application: depende de domain. SEM web/JPA. Sem dependencias de framework.
+// Casos de uso + portas (interfaces de gateway) sao Java puro e testavel sem Spring.
+dependencies {
+    api project(':domain')
+
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.20.0'
+}

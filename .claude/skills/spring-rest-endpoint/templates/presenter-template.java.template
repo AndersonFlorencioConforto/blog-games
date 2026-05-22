@@ -1,0 +1,19 @@
+package {{package}}.infrastructure.{{resourceLower}}.presenters;
+
+import {{package}}.application.{{resourceLower}}.retrieve.get.{{resource}}Output;
+import {{package}}.infrastructure.{{resourceLower}}.models.{{resource}}Response;
+
+public interface {{resource}}ApiPresenter {
+
+    static {{resource}}Response present(final {{resource}}Output output) {
+        return new {{resource}}Response(
+                output.id().getValue(),
+                output.name(),
+                output.description(),
+                output.isActive(),
+                output.createdAt(),
+                output.updatedAt(),
+                output.deletedAt()
+        );
+    }
+}

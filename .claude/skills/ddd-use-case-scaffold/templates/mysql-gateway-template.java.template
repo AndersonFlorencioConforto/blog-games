@@ -1,0 +1,47 @@
+package {{package}}.infrastructure.{{resourceLower}};
+
+import {{package}}.domain.{{resourceLower}}.{{resource}};
+import {{package}}.domain.{{resourceLower}}.{{resource}}Gateway;
+import {{package}}.domain.{{resourceLower}}.{{resource}}ID;
+import {{package}}.infrastructure.{{resourceLower}}.persistence.{{resource}}JpaEntity;
+import {{package}}.infrastructure.{{resourceLower}}.persistence.{{resource}}Repository;
+import org.springframework.stereotype.Component;
+
+import java.util.Optional;
+
+@Component
+public class {{resource}}MySQLGateway implements {{resource}}Gateway {
+
+    private final {{resource}}Repository repository;
+
+    public {{resource}}MySQLGateway(final {{resource}}Repository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public {{resource}} create(final {{resource}} aggregate) {
+        return save(aggregate);
+    }
+
+    @Override
+    public {{resource}} update(final {{resource}} aggregate) {
+        return save(aggregate);
+    }
+
+    @Override
+    public Optional<{{resource}}> findById(final {{resource}}ID id) {
+        return this.repository.findById(id.getValue()).map({{resource}}JpaEntity::toAggregate);
+    }
+
+    @Override
+    public void deleteById(final {{resource}}ID id) {
+        final var idValue = id.getValue();
+        if (this.repository.existsById(idValue)) {
+            this.repository.deleteById(idValue);
+        }
+    }
+
+    private {{resource}} save(final {{resource}} aggregate) {
+        return this.repository.save({{resource}}JpaEntity.from(aggregate)).toAggregate();
+    }
+}

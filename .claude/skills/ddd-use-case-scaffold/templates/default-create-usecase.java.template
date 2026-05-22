@@ -1,0 +1,38 @@
+package {{package}}.application.{{resourceLower}}.create;
+
+import {{package}}.domain.{{resourceLower}}.{{resource}};
+import {{package}}.domain.{{resourceLower}}.{{resource}}Gateway;
+import {{package}}.domain.exceptions.NotificationException;
+import {{package}}.domain.validation.handler.Notification;
+
+import java.util.Objects;
+
+public final class DefaultCreate{{resource}}UseCase extends Create{{resource}}UseCase {
+
+    private final {{resource}}Gateway gateway;
+
+    public DefaultCreate{{resource}}UseCase(final {{resource}}Gateway gateway) {
+        this.gateway = Objects.requireNonNull(gateway);
+    }
+
+    @Override
+    public Create{{resource}}Output execute(final Create{{resource}}Command command) {
+        final var notification = Notification.create();
+
+        final var aggregate = notification.validate(() -> {{resource}}.new{{resource}}(
+                command.name(),
+                command.description(),
+                command.active()
+        ));
+
+        if (notification.hasError()) {
+            notify(notification);
+        }
+
+        return Create{{resource}}Output.with(this.gateway.create(aggregate));
+    }
+
+    private static void notify(final Notification notification) {
+        throw new NotificationException("Nao foi possivel criar o Aggregate {{resource}}", notification);
+    }
+}

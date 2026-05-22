@@ -1,0 +1,43 @@
+package {{package}}.application.{{resourceLower}}.create;
+
+import {{package}}.domain.{{resourceLower}}.{{resource}}Gateway;
+import {{package}}.domain.exceptions.NotificationException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
+
+public class Create{{resource}}UseCaseTest {
+
+    @Test
+    void givenValidCommand_whenExecute_thenReturnOutput() {
+        final var gateway = Mockito.mock({{resource}}Gateway.class);
+        Mockito.when(gateway.create(Mockito.any())).thenAnswer(returnsFirstArg());
+
+        final var useCase = new DefaultCreate{{resource}}UseCase(gateway);
+        final var command = Create{{resource}}Command.with("nome", "descricao", true);
+
+        final var output = useCase.execute(command);
+
+        Assertions.assertNotNull(output);
+        Assertions.assertNotNull(output.id());
+        Mockito.verify(gateway, Mockito.times(1)).create(Mockito.any());
+    }
+
+    @Test
+    void givenInvalidName_whenExecute_thenThrowNotificationException() {
+        final var gateway = Mockito.mock({{resource}}Gateway.class);
+        final var useCase = new DefaultCreate{{resource}}UseCase(gateway);
+
+        final var command = Create{{resource}}Command.with(null, "descricao", true);
+        final var exception = Assertions.assertThrows(
+                NotificationException.class,
+                () -> useCase.execute(command)
+        );
+
+        Assertions.assertNotNull(exception);
+        Assertions.assertFalse(exception.getErrors().isEmpty());
+        Mockito.verify(gateway, Mockito.never()).create(Mockito.any());
+    }
+}

@@ -1,0 +1,41 @@
+package {{package}}.infrastructure.api;
+
+import {{package}}.infrastructure.{{resourceLower}}.models.Create{{resource}}Request;
+import {{package}}.infrastructure.{{resourceLower}}.models.{{resource}}Response;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@RequestMapping(value = "/{{resourceLower}}s")
+@Tag(name = "{{resource}}s")
+public interface {{resource}}API {
+
+    @PostMapping(
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(summary = "Cria um novo {{resourceLower}}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Criado com sucesso"),
+            @ApiResponse(responseCode = "422", description = "Ocorreu um erro de validacao"),
+            @ApiResponse(responseCode = "500", description = "Ocorreu um erro interno do servidor")
+    })
+    ResponseEntity<?> create{{resource}}(@RequestBody Create{{resource}}Request input);
+
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Busca um {{resourceLower}} por id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Recuperado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Recurso nao encontrado"),
+            @ApiResponse(responseCode = "500", description = "Ocorreu um erro interno do servidor")
+    })
+    {{resource}}Response getById(@PathVariable(name = "id") String id);
+}

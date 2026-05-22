@@ -1,0 +1,26 @@
+# Profile local (ADR-0002 / data-strategy): H2 file-based, sem Flyway, ddl-auto update.
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/blogdb;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;AUTO_SERVER=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  flyway:
+    enabled: false
+  h2:
+    console:
+      enabled: true
+
+# Em local, mail desabilitado: o link de reset e apenas logado (configuravel via MAIL_ENABLED).
+app:
+  mail:
+    enabled: false
+
+logging:
+  level:
+    br.com.andersondev: DEBUG
